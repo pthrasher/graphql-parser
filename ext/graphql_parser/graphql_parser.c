@@ -12,7 +12,7 @@ FOR_EACH_CONCRETE_TYPE(GENERATE_SYMBOLS)
 #define GENERATE_VISIT_CB(type, snake_type) \
     static int visit_##snake_type(const struct GraphQLAst##type *snake_type, \
             void *user_data) { \
-        VALUE parent = *(VALUE*)user_data; \
+        VALUE parent = (VALUE)user_data; \
         return FIXNUM_P(rb_funcall(parent, visit_##snake_type##_sym, 0)); \
     }
 FOR_EACH_CONCRETE_TYPE(GENERATE_VISIT_CB)
@@ -20,7 +20,7 @@ FOR_EACH_CONCRETE_TYPE(GENERATE_VISIT_CB)
 #define GENERATE_END_VISIT_CB(type, snake_type) \
     static void end_visit_##snake_type(const struct GraphQLAst##type *snake_type, \
             void *user_data) { \
-        VALUE parent = *(VALUE*)user_data; \
+        VALUE parent = (VALUE)user_data; \
         rb_funcall(parent, end_visit_##snake_type##_sym, 0); \
     }
 FOR_EACH_CONCRETE_TYPE(GENERATE_END_VISIT_CB)
@@ -62,7 +62,7 @@ accept(VALUE self, VALUE ast) {
 
     TypedData_Get_Struct(ast, struct GraphQLAstNode, &ast_type, n);
 
-    graphql_node_visit(n, &cbs, &self);
+    graphql_node_visit(n, &cbs, (void*)self);
 
     return Qnil;
 }
