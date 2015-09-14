@@ -1,8 +1,8 @@
 #include <ruby.h>
 
-#include "GraphQLParser.h"
-#include "GraphQLASTNode.h"
-#include "GraphQLASTVisitor.h"
+#include "c/GraphQLParser.h"
+#include "c/GraphQLAstNode.h"
+#include "c/GraphQLAstVisitor.h"
 
 #define GENERATE_SYMBOLS(type, snake_type) \
     static ID visit_##snake_type##_sym; \
