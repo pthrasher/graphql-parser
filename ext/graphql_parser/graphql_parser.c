@@ -27,6 +27,19 @@ FOR_EACH_CONCRETE_TYPE(GENERATE_END_VISIT_CB)
 
 static struct GraphQLAstVisitorCallbacks cbs;
 
+static VALUE ast_class;
+
+static void
+free_ast(void *x) {
+    graphql_node_free((struct GraphQLAstNode*)x);
+}
+
+static const rb_data_type_t ast_type = {
+    "AST",
+    {0, free_ast,},
+    0, 0,
+};
+
 static VALUE
 parse(int argc, VALUE *argv, VALUE obj) {
     char *input;
@@ -43,19 +56,37 @@ parse(int argc, VALUE *argv, VALUE obj) {
         return Qnil;
     }
 
+    return TypedData_Wrap_Struct(ast_class, &ast_type, n);
+}
+
+static VALUE
+accept(int argc, VALUE *argv, VALUE obj) {
+    struct GraphQLAstNode *n;
+
+    if (argc != 1) {
+        rb_raise(rb_eArgError, "Takes 1 argument");
+    }
+
+    TypedData_Get_Struct(argv[0], struct GraphQLAstNode, &ast_type, n);
+
     graphql_node_visit(n, &cbs, &obj);
 
-    graphql_node_free(n);
     return Qnil;
 }
 
 void
 Init_graphql_parser(void) {
-    VALUE m, c;
+    VALUE module, parser, visitor;
 
-    m = rb_define_module("GraphQL");
-    c = rb_define_class_under(m, "Parser", rb_cObject);
-    rb_define_method(c, "parse", parse, -1);
+    module = rb_define_module("GraphQL");
+
+    parser = rb_define_module_under(module, "Parser");
+    rb_define_module_function(parser, "parse", parse, -1);
+
+    visitor = rb_define_class_under(module, "Visitor", rb_cObject);
+    rb_define_method(visitor, "accept", accept, -1);
+
+    ast_class = rb_define_class_under(module, "AST", rb_cObject);
 
 #define INTERN_SYMBOLS(type, snake_type) \
     visit_##snake_type##_sym = rb_intern("visit_" #snake_type); \
