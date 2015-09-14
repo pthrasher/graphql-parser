@@ -2,7 +2,7 @@ require "bundler/gem_tasks"
 require "rake/extensiontask"
 require 'rake/testtask'
 
-Rake::TestTask.new do |t|
+Rake::TestTask.new(:test => :compile) do |t|
     t.test_files = FileList['test/**/*_test.rb']
 end
 
