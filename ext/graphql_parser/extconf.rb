@@ -1,6 +1,6 @@
 require 'mkmf'
 
-dir_config('graphql', '/usr/local/include', '/usr/local/lib')
+dir_config('graphql', '/usr/local/include/GraphQL', '/usr/local/lib')
 
 abort 'missing libgraphqlparser' unless have_library 'graphqlparser'
 
