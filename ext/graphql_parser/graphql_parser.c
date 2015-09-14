@@ -41,14 +41,11 @@ static const rb_data_type_t ast_type = {
 };
 
 static VALUE
-parse(int argc, VALUE *argv, VALUE obj) {
+parse(VALUE self, VALUE text) {
     char *input;
     struct GraphQLAstNode *n;
 
-    if (argc != 1) {
-        rb_raise(rb_eArgError, "Takes 1 argument");
-    }
-    input = StringValueCStr(argv[0]);
+    input = StringValueCStr(text);
 
     n = graphql_parse_string(input, NULL);
 
@@ -60,16 +57,12 @@ parse(int argc, VALUE *argv, VALUE obj) {
 }
 
 static VALUE
-accept(int argc, VALUE *argv, VALUE obj) {
+accept(VALUE self, VALUE ast) {
     struct GraphQLAstNode *n;
 
-    if (argc != 1) {
-        rb_raise(rb_eArgError, "Takes 1 argument");
-    }
+    TypedData_Get_Struct(ast, struct GraphQLAstNode, &ast_type, n);
 
-    TypedData_Get_Struct(argv[0], struct GraphQLAstNode, &ast_type, n);
-
-    graphql_node_visit(n, &cbs, &obj);
+    graphql_node_visit(n, &cbs, &self);
 
     return Qnil;
 }
@@ -81,10 +74,10 @@ Init_graphql_parser(void) {
     module = rb_define_module("GraphQL");
 
     parser = rb_define_module_under(module, "Parser");
-    rb_define_module_function(parser, "parse", parse, -1);
+    rb_define_module_function(parser, "parse", parse, 1);
 
     visitor = rb_define_class_under(module, "Visitor", rb_cObject);
-    rb_define_method(visitor, "accept", accept, -1);
+    rb_define_method(visitor, "accept", accept, 1);
 
     ast_class = rb_define_class_under(module, "AST", rb_cObject);
 
