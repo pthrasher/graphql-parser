@@ -90,7 +90,7 @@ Init_graphql_parser(void) {
 
 #define INTERN_SYMBOLS(type, snake_type) \
     visit_##snake_type##_sym = rb_intern("visit_" #snake_type); \
-    end_visit_##snake_type##_sym = rb_intern("end_visit" #snake_type);
+    end_visit_##snake_type##_sym = rb_intern("end_visit_" #snake_type);
 
 FOR_EACH_CONCRETE_TYPE(INTERN_SYMBOLS)
 
