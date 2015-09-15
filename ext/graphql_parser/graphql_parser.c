@@ -55,8 +55,9 @@ parse(VALUE self, VALUE text) {
     n = graphql_parse_string(input, &error);
 
     if (n == NULL) {
-        rb_raise(parse_error, "%s", error);
+        VALUE exc = rb_exc_new_cstr(parse_error, error);
         graphql_error_free(error);
+        rb_exc_raise(exc);
         return Qnil;
     }
 
