@@ -8,7 +8,7 @@ class VisitorTest < Minitest::Test
       @nodes = []
     end
 
-    def method_missing(name)
+    def method_missing(name, node)
       @nodes << name
     end
   end
@@ -31,7 +31,7 @@ class VisitorTest < Minitest::Test
   end
 
   class SkipChildrenVisitor < Visitor
-    def visit_document
+    def visit_document(node)
       @nodes << :visit_document
       GraphQL::SKIP_CHILDREN
     end
