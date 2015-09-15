@@ -4,6 +4,8 @@
 #include "c/GraphQLAstNode.h"
 #include "c/GraphQLAstVisitor.h"
 
+static VALUE ast_class, parse_error, skip_children;
+
 #define GENERATE_SYMBOLS(type, snake_type) \
     static ID visit_##snake_type##_sym; \
     static ID end_visit_##snake_type##_sym;
@@ -13,7 +15,7 @@ FOR_EACH_CONCRETE_TYPE(GENERATE_SYMBOLS)
     static int visit_##snake_type(const struct GraphQLAst##type *snake_type, \
             void *user_data) { \
         VALUE parent = (VALUE)user_data; \
-        return FIXNUM_P(rb_funcall(parent, visit_##snake_type##_sym, 0)); \
+        return rb_funcall(parent, visit_##snake_type##_sym, 0) != skip_children; \
     }
 FOR_EACH_CONCRETE_TYPE(GENERATE_VISIT_CB)
 
@@ -26,8 +28,6 @@ FOR_EACH_CONCRETE_TYPE(GENERATE_VISIT_CB)
 FOR_EACH_CONCRETE_TYPE(GENERATE_END_VISIT_CB)
 
 static struct GraphQLAstVisitorCallbacks cbs;
-
-static VALUE ast_class, parse_error;
 
 static void
 free_ast(void *x) {
@@ -85,6 +85,9 @@ Init_graphql_parser(void) {
     parse_error = rb_define_class_under(module, "ParseError", rb_eArgError);
 
     ast_class = rb_define_class_under(module, "AST", rb_cObject);
+
+    skip_children = rb_class_new_instance(0, NULL, rb_cObject);
+    rb_define_const(module, "SKIP_CHILDREN", skip_children);
 
 #define INTERN_SYMBOLS(type, snake_type) \
     visit_##snake_type##_sym = rb_intern("visit_" #snake_type); \
