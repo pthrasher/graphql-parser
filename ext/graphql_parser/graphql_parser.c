@@ -27,7 +27,7 @@ FOR_EACH_CONCRETE_TYPE(GENERATE_END_VISIT_CB)
 
 static struct GraphQLAstVisitorCallbacks cbs;
 
-static VALUE ast_class;
+static VALUE ast_class, parse_error;
 
 static void
 free_ast(void *x) {
@@ -44,12 +44,15 @@ static VALUE
 parse(VALUE self, VALUE text) {
     char *input;
     struct GraphQLAstNode *n;
+    const char *error;
 
     input = StringValueCStr(text);
 
-    n = graphql_parse_string(input, NULL);
+    n = graphql_parse_string(input, &error);
 
     if (n == NULL) {
+        rb_raise(parse_error, "%s", error);
+        graphql_error_free(error);
         return Qnil;
     }
 
@@ -78,6 +81,8 @@ Init_graphql_parser(void) {
 
     visitor = rb_define_class_under(module, "Visitor", rb_cObject);
     rb_define_method(visitor, "accept", accept, 1);
+
+    parse_error = rb_define_class_under(module, "ParseError", rb_eArgError);
 
     ast_class = rb_define_class_under(module, "AST", rb_cObject);
 
