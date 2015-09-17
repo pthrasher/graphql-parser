@@ -24,6 +24,7 @@ Or install it yourself as:
 
 Parse your graphql string to get an AST:
 ```ruby
+require 'graphql/parser'
 ast = GraphQL::Parser.parse('{ some_graphql_string }') # returns GraphQL::AST
 ```
 
