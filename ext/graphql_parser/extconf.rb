@@ -1,14 +1,15 @@
 require 'mkmf'
 
 ROOT = '../../../..'
-
-`cd #{ROOT}/libgraphqlparser && cmake . && make && cd -`
-
 dir_config('graphql', "#{ROOT}/libgraphqlparser", "#{ROOT}/libgraphqlparser")
 
-AST = "#{ROOT}/libgraphqlparser/ast"
-`PYTHONPATH=$PYTHONPATH:#{ROOT}/generators python #{AST}/ast.py ruby_header_gen #{AST}/ast.ast > #{ROOT}/ext/graphql_parser/graphql_ruby.h`
-`PYTHONPATH=$PYTHONPATH:#{ROOT}/generators python #{AST}/ast.py ruby_impl_gen #{AST}/ast.ast > #{ROOT}/ext/graphql_parser/graphql_ruby.c`
+SRC = "#{ROOT}/ext/graphql_parser/graphql_ruby"
+unless File.exist?("#{SRC}.c") && File.exist?("#{SRC}.h")
+  abort '''
+  Missing the generated bindings. Please run `./script/setup` from
+  the root of the repository to create them.
+  '''
+end
 
 abort 'missing libgraphqlparser' unless have_library 'graphqlparser'
 

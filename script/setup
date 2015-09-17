@@ -1,0 +1,17 @@
+#!/bin/sh
+
+set -x
+set -e
+
+git submodule update --init
+
+cd libgraphqlparser
+cmake .
+make -j2
+cd ..
+
+export PYTHONPATH=$PYTHONPATH:script
+GEN=libgraphqlparser/ast
+OUT=ext/graphql_parser
+python ${GEN}/ast.py ruby_header_gen ${GEN}/ast.ast > ${OUT}/graphql_ruby.h
+python ${GEN}/ast.py ruby_impl_gen ${GEN}/ast.ast > ${OUT}/graphql_ruby.c
