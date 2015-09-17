@@ -5,11 +5,6 @@ set -e
 
 git submodule update --init
 
-cd libgraphqlparser
-cmake .
-make -j2
-cd ..
-
 export PYTHONPATH=$PYTHONPATH:script
 GEN=libgraphqlparser/ast
 OUT=ext/graphql_parser
