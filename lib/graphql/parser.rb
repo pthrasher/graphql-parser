@@ -1,6 +1,6 @@
-require "graphql/parser/version"
-require "graphql/visitor"
-require "graphql_parser/graphql_parser"
+require 'graphql/parser/version'
+require 'graphql/visitor'
+require 'graphql_parser'
 
 module GraphQL
   module Parser
