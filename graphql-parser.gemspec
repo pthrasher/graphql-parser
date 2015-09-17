@@ -9,6 +9,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ['Evan Huus']
   spec.email         = ['evan.huus@shopify.com']
   spec.summary       = "Ruby bindings for Facebook's libgraphqlparser."
+  spec.license       = 'BSD-3-Clause'
 
   spec.files         = `git ls-files -z`.split("\x0")
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
