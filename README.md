@@ -1,6 +1,8 @@
-# Graphql::Parser
+# GraphQL::Parser
 
-TODO: Write a gem description
+A small wrapper around the
+[libgraphqlparser](https://github.com/graphql/libgraphqlparser) C library for
+parsing [GraphQL](http://graphql.org/).
 
 ## Installation
 
@@ -20,7 +22,34 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+Parse your graphql string to get an AST:
+```ruby
+ast = GraphQL::Parser.parse('{ some_graphql_string }') # returns GraphQL::AST
+```
+
+This will raise `GraphQL::ParseError` on malformed input.
+
+Implement a visitor:
+```ruby
+class MyVisitor < GraphQL::Visitor
+  def visit_document(node)
+    # do something interesting
+  end
+
+  def end_visit_document(node)
+    # do something interesting
+  end
+
+  # implement visit methods for all GraphQL node types
+end```
+
+And walk the AST:
+```ruby
+v = MyVisitor.new
+v.accept(ast)```
+
+You can return `GraphQL::SKIP_CHILDREN` from a visitor to skip visiting that
+node's children.
 
 ## Contributing
 
