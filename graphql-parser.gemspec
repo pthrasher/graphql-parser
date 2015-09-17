@@ -11,6 +11,7 @@ Gem::Specification.new do |spec|
   spec.summary       = "Ruby bindings for Facebook's libgraphqlparser."
   spec.license       = 'BSD-3-Clause'
 
+  spec.extensions    = 'ext/graphql_parser/extconf.rb'
   spec.files         = `git ls-files -z`.split("\x0")
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
