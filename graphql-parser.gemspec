@@ -7,6 +7,7 @@ Gem::Specification.new do |spec|
   spec.name          = 'graphql-parser'
   spec.version       = Graphql::Parser::VERSION
   spec.authors       = ['Evan Huus']
+  spec.homepage      = 'https://github.com/Shopify/graphql-parser'
   spec.email         = ['evan.huus@shopify.com']
   spec.summary       = "Ruby bindings for Facebook's libgraphqlparser."
   spec.license       = 'BSD-3-Clause'
