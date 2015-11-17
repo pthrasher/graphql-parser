@@ -729,42 +729,42 @@ void init_graphql(void) {
   parser = rb_define_module_under(module, "Parser");
   rb_define_module_function(parser, "parse", parse, 1);
 
-  visitor = rb_define_class_under(module, "Visitor", rb_cObject);
+  visitor = rb_define_class_under(parser, "Visitor", rb_cObject);
   rb_define_method(visitor, "accept", accept, 1);
 
-  parse_error = rb_define_class_under(module, "ParseError", rb_eArgError);
+  parse_error = rb_define_class_under(parser, "ParseError", rb_eArgError);
 
-  ast_class = rb_define_class_under(module, "AST", rb_cObject);
+  ast_class = rb_define_class_under(parser, "AST", rb_cObject);
 
-  node_class = rb_define_class_under(module, "Node", rb_cObject);
+  node_class = rb_define_class_under(parser, "Node", rb_cObject);
 
   skip_children = rb_class_new_instance(0, NULL, rb_cObject);
-  rb_define_const(module, "SKIP_CHILDREN", skip_children);
+  rb_define_const(parser, "SKIP_CHILDREN", skip_children);
 
 
-  document_class = rb_define_class_under(module, "Document", node_class);
-  operation_definition_class = rb_define_class_under(module, "OperationDefinition", node_class);
-  variable_definition_class = rb_define_class_under(module, "VariableDefinition", node_class);
-  selection_set_class = rb_define_class_under(module, "SelectionSet", node_class);
-  field_class = rb_define_class_under(module, "Field", node_class);
-  argument_class = rb_define_class_under(module, "Argument", node_class);
-  fragment_spread_class = rb_define_class_under(module, "FragmentSpread", node_class);
-  inline_fragment_class = rb_define_class_under(module, "InlineFragment", node_class);
-  fragment_definition_class = rb_define_class_under(module, "FragmentDefinition", node_class);
-  variable_class = rb_define_class_under(module, "Variable", node_class);
-  int_value_class = rb_define_class_under(module, "IntValue", node_class);
-  float_value_class = rb_define_class_under(module, "FloatValue", node_class);
-  string_value_class = rb_define_class_under(module, "StringValue", node_class);
-  boolean_value_class = rb_define_class_under(module, "BooleanValue", node_class);
-  enum_value_class = rb_define_class_under(module, "EnumValue", node_class);
-  array_value_class = rb_define_class_under(module, "ArrayValue", node_class);
-  object_value_class = rb_define_class_under(module, "ObjectValue", node_class);
-  object_field_class = rb_define_class_under(module, "ObjectField", node_class);
-  directive_class = rb_define_class_under(module, "Directive", node_class);
-  named_type_class = rb_define_class_under(module, "NamedType", node_class);
-  list_type_class = rb_define_class_under(module, "ListType", node_class);
-  non_null_type_class = rb_define_class_under(module, "NonNullType", node_class);
-  name_class = rb_define_class_under(module, "Name", node_class);
+  document_class = rb_define_class_under(parser, "Document", node_class);
+  operation_definition_class = rb_define_class_under(parser, "OperationDefinition", node_class);
+  variable_definition_class = rb_define_class_under(parser, "VariableDefinition", node_class);
+  selection_set_class = rb_define_class_under(parser, "SelectionSet", node_class);
+  field_class = rb_define_class_under(parser, "Field", node_class);
+  argument_class = rb_define_class_under(parser, "Argument", node_class);
+  fragment_spread_class = rb_define_class_under(parser, "FragmentSpread", node_class);
+  inline_fragment_class = rb_define_class_under(parser, "InlineFragment", node_class);
+  fragment_definition_class = rb_define_class_under(parser, "FragmentDefinition", node_class);
+  variable_class = rb_define_class_under(parser, "Variable", node_class);
+  int_value_class = rb_define_class_under(parser, "IntValue", node_class);
+  float_value_class = rb_define_class_under(parser, "FloatValue", node_class);
+  string_value_class = rb_define_class_under(parser, "StringValue", node_class);
+  boolean_value_class = rb_define_class_under(parser, "BooleanValue", node_class);
+  enum_value_class = rb_define_class_under(parser, "EnumValue", node_class);
+  array_value_class = rb_define_class_under(parser, "ArrayValue", node_class);
+  object_value_class = rb_define_class_under(parser, "ObjectValue", node_class);
+  object_field_class = rb_define_class_under(parser, "ObjectField", node_class);
+  directive_class = rb_define_class_under(parser, "Directive", node_class);
+  named_type_class = rb_define_class_under(parser, "NamedType", node_class);
+  list_type_class = rb_define_class_under(parser, "ListType", node_class);
+  non_null_type_class = rb_define_class_under(parser, "NonNullType", node_class);
+  name_class = rb_define_class_under(parser, "Name", node_class);
 
   rb_define_method(document_class, "definitions_size", document_get_definitions_size, 0);
   rb_define_method(operation_definition_class, "operation", operation_definition_get_operation, 0);

@@ -26,12 +26,12 @@ class ParserTest < Minitest::Test
   private
 
   def expect_parse_error(input)
-    assert_raises(GraphQL::ParseError) do
+    assert_raises(GraphQL::Parser::ParseError) do
       GraphQL::Parser.parse(input)
     end
   end
 
   def expect_parse_success(input)
-    assert_equal GraphQL::AST, GraphQL::Parser.parse(input).class
+    assert_equal GraphQL::Parser::AST, GraphQL::Parser.parse(input).class
   end
 end

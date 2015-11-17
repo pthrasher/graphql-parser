@@ -1,7 +1,8 @@
 require_relative 'test_helper'
+require 'pry'
 
 class VisitorTest < Minitest::Test
-  class NameVisitor < GraphQL::Visitor
+  class NameVisitor < GraphQL::Parser::Visitor
     attr_accessor :nodes
 
     def initialize
@@ -30,10 +31,10 @@ class VisitorTest < Minitest::Test
     ], v.nodes
   end
 
-  class SkipChildrenVisitor < GraphQL::Visitor
+  class SkipChildrenVisitor < GraphQL::Parser::Visitor
     def visit_document(node)
       @nodes << :visit_document
-      GraphQL::SKIP_CHILDREN
+      GraphQL::Parser::SKIP_CHILDREN
     end
   end
 
@@ -46,7 +47,7 @@ class VisitorTest < Minitest::Test
     ], v.nodes
   end
 
-  class NodeVisitor < GraphQL::Visitor
+  class NodeVisitor < GraphQL::Parser::Visitor
     attr_accessor :nodes
 
     def initialize
@@ -62,25 +63,26 @@ class VisitorTest < Minitest::Test
     v = NodeVisitor.new
     v.accept(GraphQL::Parser.parse('{ field }'))
 
-    assert_equal GraphQL::Document, v.nodes[0].class
+    #binding.pry
+    assert_equal GraphQL::Parser::Document, v.nodes[0].class
     assert_equal 1, v.nodes[0].definitions_size
 
-    assert_equal GraphQL::OperationDefinition, v.nodes[1].class
+    assert_equal GraphQL::Parser::OperationDefinition, v.nodes[1].class
     assert_equal 'query', v.nodes[1].operation
     assert_nil v.nodes[1].name
-    assert_equal GraphQL::SelectionSet, v.nodes[1].selection_set.class
+    assert_equal GraphQL::Parser::SelectionSet, v.nodes[1].selection_set.class
     assert_equal 0, v.nodes[1].variable_definitions_size
     assert_equal 0, v.nodes[1].directives_size
 
-    assert_equal GraphQL::SelectionSet, v.nodes[2].class
+    assert_equal GraphQL::Parser::SelectionSet, v.nodes[2].class
     assert_equal 1, v.nodes[2].selections_size
 
-    assert_equal GraphQL::Field, v.nodes[3].class
+    assert_equal GraphQL::Parser::Field, v.nodes[3].class
     assert_nil v.nodes[3].alias
-    assert_equal GraphQL::Name, v.nodes[3].name.class
+    assert_equal GraphQL::Parser::Name, v.nodes[3].name.class
     assert_equal 'field', v.nodes[3].name.value
 
-    assert_equal GraphQL::Name, v.nodes[4].class
+    assert_equal GraphQL::Parser::Name, v.nodes[4].class
     assert_equal 'field', v.nodes[4].value
   end
 end

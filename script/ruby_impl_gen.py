@@ -137,17 +137,17 @@ void init_graphql(void) {
   parser = rb_define_module_under(module, "Parser");
   rb_define_module_function(parser, "parse", parse, 1);
 
-  visitor = rb_define_class_under(module, "Visitor", rb_cObject);
+  visitor = rb_define_class_under(parser, "Visitor", rb_cObject);
   rb_define_method(visitor, "accept", accept, 1);
 
-  parse_error = rb_define_class_under(module, "ParseError", rb_eArgError);
+  parse_error = rb_define_class_under(parser, "ParseError", rb_eArgError);
 
-  ast_class = rb_define_class_under(module, "AST", rb_cObject);
+  ast_class = rb_define_class_under(parser, "AST", rb_cObject);
 
-  node_class = rb_define_class_under(module, "Node", rb_cObject);
+  node_class = rb_define_class_under(parser, "Node", rb_cObject);
 
   skip_children = rb_class_new_instance(0, NULL, rb_cObject);
-  rb_define_const(module, "SKIP_CHILDREN", skip_children);
+  rb_define_const(parser, "SKIP_CHILDREN", skip_children);
 
 '''
     print self._class_init_buffer
@@ -169,7 +169,7 @@ void init_graphql(void) {
     print type_end_visitor(name)
 
     # init the class
-    self._class_init_buffer += '  %s_class = rb_define_class_under(module, "%s", node_class);\n' % (
+    self._class_init_buffer += '  %s_class = rb_define_class_under(parser, "%s", node_class);\n' % (
             snake(name), name)
 
     # init the symbols
